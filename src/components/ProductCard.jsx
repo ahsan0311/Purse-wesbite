@@ -1,44 +1,62 @@
+import { Link } from "react-router-dom";
 import { useCart } from "../hooks/useCart";
+import toast from "react-hot-toast";
 
 export default function ProductCard({ product }) {
-  const add = useCart((state) => state.add);
+  const addToCart = useCart((state) => state.addToCart);
+
+  const handleAddToCart = () => {
+    addToCart(product);
+
+    toast.success(`${product.name} added to cart!`, {
+      duration: 2000,
+      style: {
+        borderRadius: '8px',
+        background: '#2c2218',
+        color: '#F6F3ED',
+        fontWeight: 'bold',
+        boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
+      },
+    });
+  };
 
   return (
-    <div className="group bg-warm-ivory rounded-2xl shadow-sm hover:shadow-soft-gold transition-all duration-300 overflow-hidden border border-cloud-grey">
-      {/* Image */}
-      <div className="relative overflow-hidden">
-        <img
-          src={product.image}
-          alt={product.name}
-          className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500"
-        />
-
-        {/* Floating Add to Cart icon */}
-        <button
-          onClick={() => add(product)}
-          className="absolute bottom-4 right-4 bg-deep-mocha hover:bg-soft-gold text-white p-3 rounded-full shadow-md transition-all"
-          title="Add to Cart"
-        >
-          🛒
-        </button>
-      </div>
-
-      {/* Details */}
-      <div className="p-5 text-center">
-        <h3 className="text-lg font-semibold text-deep-mocha group-hover:text-soft-gold transition">
+    <div className="bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-lg transition">
+      <img
+        src={product.image}
+        alt={product.name}
+        className="w-full h-64 object-cover"
+      />
+      <div className="p-6 text-center">
+        <h3 className="text-lg font-semibold text-deep-mocha mb-2">
           {product.name}
         </h3>
-        <p className="text-sm text-cloud-grey mt-1">{product.category}</p>
-        <p className="text-xl font-bold text-pure-black mt-3">
-          ${product.price.toFixed(2)}
+        <p className="text-soft-gold text-xl font-bold mb-4">
+          ${product.price}
         </p>
 
-        <button
-          onClick={() => add(product)}
-          className="mt-4 text-black inline-block bg-deep-mocha hover:bg-soft-gold  px-6 py-2 rounded-full font-medium transition-all shadow-md hover:shadow-soft-gold"
-        >
-          Add to Cart
-        </button>
+        <div className="flex justify-center gap-3">
+          <button
+            onClick={handleAddToCart}
+            className="px-5 py-2 bg-deep-mocha text-warm-ivory rounded-lg 
+                       border border-deep-mocha
+                       hover:bg-soft-gold hover:text-deep-mocha 
+                       hover:-translate-y-1 hover:border-soft-gold 
+                       transition-all duration-200"
+          >
+            Add to Cart
+          </button>
+
+          <Link
+            to={`/product/${product.id}`}
+            className="px-5 py-2 border border-deep-mocha text-deep-mocha rounded-lg 
+                       hover:bg-deep-mocha hover:text-warm-ivory 
+                       hover:-translate-y-1 hover:border-soft-gold 
+                       transition-all duration-200"
+          >
+            View Details
+          </Link>
+        </div>
       </div>
     </div>
   );

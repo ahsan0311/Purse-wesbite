@@ -72,55 +72,7 @@ export default function Cart() {
           </div>
         </div>
 
-        {orderSent ? (
-          <div className="mt-10 text-center bg-green-50 border border-green-200 text-green-700 p-6 rounded-xl shadow-sm">
-            <h2 className="text-2xl font-semibold mb-2">🎉 Order Placed!</h2>
-            <p>Check your email for confirmation and delivery details.</p>
-          </div>
-        ) : (
-          <form
-            action="https://formspree.io/f/YOUR_FORM_ID"
-            method="POST"
-            onSubmit={handleCheckout}
-            className="mt-12 bg-white/90 backdrop-blur-sm rounded-2xl shadow-md border border-pink-100 p-6 md:p-8 space-y-5"
-          >
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-              Shipping <span className="text-pink-600">Information</span>
-            </h2>
-
-            <div className="grid md:grid-cols-2 gap-5">
-              <input
-                type="text"
-                name="name"
-                placeholder="Full Name"
-                required
-                className="w-full p-3 border border-pink-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400"
-              />
-              <input
-                type="email"
-                name="email"
-                placeholder="Email"
-                required
-                className="w-full p-3 border border-pink-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400"
-              />
-            </div>
-
-            <textarea
-              name="address"
-              placeholder="Delivery Address"
-              rows="4"
-              required
-              className="w-full p-3 border border-pink-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-400"
-            ></textarea>
-
-            <button
-              type="submit"
-              className="w-full bg-pink-600 hover:bg-pink-700 text-white py-3 rounded-full font-semibold shadow-md hover:shadow-pink-200 transition-all"
-            >
-              Place Order
-            </button>
-          </form>
-        )}
+       
       </div>
     </section>
   );

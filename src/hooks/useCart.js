@@ -6,7 +6,7 @@ export const useCart = create(
     (set, get) => ({
       cart: [],
 
-      add: (product) => {
+      addToCart: (product) => {
         set((state) => {
           const existing = state.cart.find((i) => i.id === product.id);
           if (existing) {
