@@ -3,8 +3,8 @@ import { products } from "../data/products";
 
 export default function Products() {
   return (
-    <section className="py-20 bg-warm-ivory/90">
-      <div className="container mx-auto px-6">
+    <section className="py-20 bg-warm-ivory">
+      <div className="max-w-7xl mx-auto px-6">
         <h1 className="text-4xl md:text-5xl font-semibold text-center mb-12 text-deep-mocha">
           Our <span className="text-soft-gold">Luxury Purses</span>
         </h1>

@@ -84,7 +84,7 @@ export default function ProductDetail() {
 
   return (
     <section className="bg-warm-ivory py-16">
-      {/* Product Card */}
+      
       <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-start border border-cloud-grey rounded-xl shadow-lg overflow-hidden ">
       
 <div className="space-y-4 mt-2">
@@ -115,7 +115,7 @@ export default function ProductDetail() {
 </div>
 
 
-        {/* Product Info */}
+      
         <div className="text-deep-mocha p-6 flex flex-col">
           <h1 className="text-4xl font-bold mb-3">{product.name}</h1>
 
@@ -138,7 +138,6 @@ export default function ProductDetail() {
             </ul>
           </div>
 
-          {/* Quantity Selector */}
           <div className="flex items-center gap-4 mb-8">
             <span className="text-lg font-medium">Quantity:</span>
             <div className="flex items-center border border-cloud-grey rounded-lg overflow-hidden">
@@ -160,7 +159,6 @@ export default function ProductDetail() {
             </div>
           </div>
 
-          {/* Buttons */}
           <div className="flex flex-wrap gap-4 mt-auto">
             <button
               onClick={handleAddToCart}
@@ -183,13 +181,11 @@ export default function ProductDetail() {
         </div>
       </div>
 
-      {/* Reviews Section */}
       <div className="max-w-7xl mx-auto mt-20 border border-cloud-grey rounded-xl shadow-lg bg-white p-8">
         <h2 className="text-3xl font-bold text-deep-mocha mb-6 text-center">
           Customer Reviews
         </h2>
 
-        {/* Review Form */}
         <form
           onSubmit={handleReviewSubmit}
           className="flex flex-col gap-4 mb-10 bg-white p-6 rounded-lg shadow-sm border border-cloud-grey"
@@ -248,7 +244,6 @@ export default function ProductDetail() {
           </button>
         </form>
 
-        {/* Reviews List */}
         {reviews.length === 0 ? (
           <p className="text-deep-mocha text-center">
             No reviews yet. Be the first to share your thoughts!
@@ -284,3 +279,6 @@ export default function ProductDetail() {
     </section>
   );
 }
+
+
+
