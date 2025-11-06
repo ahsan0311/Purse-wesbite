@@ -117,7 +117,6 @@ export default function Checkout() {
     className="border border-cloud-grey rounded-lg p-3 focus:ring-2 focus:ring-soft-gold focus:outline-none text-deep-mocha"
   />
 
-  {/* Add cart items as hidden inputs */}
   {cart.map((item, index) => (
     <div key={item.id}>
       <input
