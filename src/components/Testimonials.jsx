@@ -1,183 +1,203 @@
-// import React, { useState } from "react";
-
-// const Testimonials = () => {
-//   const [stopScroll, setStopScroll] = useState(false);
-
-//   const testimonialData = [
-//     {
-//       title: "I fell in love with the craftsmanship!",
-//       image:
-//         "https://media.istockphoto.com/id/1271796113/photo/women-is-holding-handbag-near-luxury-car.webp?b=1&s=612x612&w=0&k=20&c=46lVdkNs9I8654pAKLuNIEWv7InXFC5XZfKgB47BD5k=",
-//       name: "Sophia L.",
-//     },
-//     {
-//       title: "Elegant designs for every occasion.",
-//       image:
-//         "https://cdn.pixabay.com/photo/2024/05/28/11/14/woman-8793611_1280.jpg",
-//       name: "Emma R.",
-//     },
-//     {
-//       title: "Luxury purses that turn heads.",
-//       image:
-//         "https://cdn.pixabay.com/photo/2024/04/29/17/19/girlie-8728461_1280.jpg",
-//       name: "Olivia K.",
-//     },
-//     {
-//       title: "Beautiful, stylish, and versatile.",
-//       image:
-//         "https://cdn.pixabay.com/photo/2017/08/10/01/52/girl-2617010_1280.jpg",
-//       name: "Ava M.",
-//     },
-//   ];
-
-//   return (
-//     <section className="relative bg-warm-ivory py-20 overflow-hidden">
-//       <div className="absolute top-0 left-0 w-64 h-64 bg-soft-gold rounded-full blur-3xl opacity-30 animate-pulse"></div>
-//       <div className="absolute bottom-0 right-0 w-56 h-56 bg-soft-gold rounded-full blur-3xl opacity-20 animate-pulse"></div>
-
-//       <div className="text-center mb-12 relative z-10">
-//         <h2 className="text-3xl md:text-5xl font-semibold text-deep-mocha">
-//           What Our <span className="text-soft-gold">Customers Say</span>
-//         </h2>
-//         <p className="text-cloud-grey mt-4 max-w-2xl mx-auto">
-//           Hear from our delighted customers who have experienced the luxury and
-//           elegance of our curated purse collection.
-//         </p>
-//       </div>
-
-//       <div
-//         className="overflow-hidden w-full relative max-w-7xl mx-auto z-10"
-//         onMouseEnter={() => setStopScroll(true)}
-//         onMouseLeave={() => setStopScroll(false)}
-//       >
-//         <div className="absolute left-0 top-0 h-full w-20 z-10 pointer-events-none bg-gradient-to-r from-warm-ivory/90 to-transparent" />
-//         <div
-//           className="marquee-inner flex w-fit"
-//           style={{
-//             animationPlayState: stopScroll ? "paused" : "running",
-//             animationDuration: testimonialData.length * 2500 + "ms",
-//           }}
-//         >
-//           <div className="flex">
-//             {[...testimonialData, ...testimonialData].map((card, index) => (
-//               <div
-//                 key={index}
-//                 className="w-64 mx-4 h-80 relative group rounded-2xl overflow-hidden hover:scale-105 transition-all duration-300"
-//               >
-//                 <img
-//                   src={card.image}
-//                   alt="testimonial"
-//                   className="w-full h-full object-cover"
-//                 />
-//                 <div className="absolute inset-0 bg-pure-black/20 flex flex-col justify-end p-4 opacity-0 group-hover:opacity-100 transition-all duration-300">
-//                   <p className="text-white font-semibold text-center mb-2">
-//                     "{card.title}"
-//                   </p>
-//                   <p className="text-soft-gold font-medium text-center">
-//                     - {card.name}
-//                   </p>
-//                 </div>
-//               </div>
-//             ))}
-//           </div>
-//         </div>
-//         <div className="absolute right-0 top-0 h-full w-20 md:w-40 z-10 pointer-events-none bg-gradient-to-l from-warm-ivory/80 to-transparent" />
-//       </div>
-
-//       <style>{`
-//         .marquee-inner {
-//           display: flex;
-//           animation: marqueeScroll linear infinite;
-//         }
-
-//         @keyframes marqueeScroll {
-//           0% {
-//             transform: translateX(0%);
-//           }
-//           100% {
-//             transform: translateX(-50%);
-//           }
-//         }
-//       `}</style>
-//     </section>
-//   );
-// };
-
-// export default Testimonials;
-
-
-
-import React, { useState } from "react";
+import { useRef } from "react";
 import { products } from "../data/products";
 import { useNavigate } from "react-router-dom";
 
 const Testimonials = () => {
-  const [stopScroll, setStopScroll] = useState(false);
   const navigate = useNavigate();
+  const scrollContainerRef = useRef(null);
+
+  const isDragging = useRef(false);
+  const startX = useRef(0);
+  const scrollLeft = useRef(0);
+  const dragDistance = useRef(0);
+
+  const onMouseDown = (e) => {
+    isDragging.current = true;
+    startX.current = e.pageX - scrollContainerRef.current.offsetLeft;
+    scrollLeft.current = scrollContainerRef.current.scrollLeft;
+    dragDistance.current = 0;
+  };
+
+  const onMouseLeave = () => {
+    isDragging.current = false;
+  };
+
+  const onMouseUp = () => {
+    isDragging.current = false;
+  };
+
+  const onMouseMove = (e) => {
+    if (!isDragging.current) return;
+    e.preventDefault();
+    const x = e.pageX - scrollContainerRef.current.offsetLeft;
+    const walk = x - startX.current;
+    dragDistance.current = Math.abs(walk);
+    scrollContainerRef.current.scrollLeft = scrollLeft.current - walk;
+  };
+
+  const onTouchStart = (e) => {
+    isDragging.current = true;
+    startX.current = e.touches[0].pageX - scrollContainerRef.current.offsetLeft;
+    scrollLeft.current = scrollContainerRef.current.scrollLeft;
+    dragDistance.current = 0;
+  };
+
+  const onTouchMove = (e) => {
+    if (!isDragging.current) return;
+    const x = e.touches[0].pageX - scrollContainerRef.current.offsetLeft;
+    const walk = x - startX.current;
+    dragDistance.current = Math.abs(walk);
+    scrollContainerRef.current.scrollLeft = scrollLeft.current - walk;
+  };
+
+  const onTouchEnd = () => {
+    isDragging.current = false;
+  };
+
+  const handleCardClick = (productId) => {
+    if (dragDistance.current < 8) {
+      navigate(`/product/${productId}`);
+    }
+  };
+
+  const scrollByAmount = (amount) => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollBy({
+        left: amount,
+        behavior: "smooth",
+      });
+    }
+  };
 
   return (
-    <section className="relative bg-warm-ivory py-20 overflow-hidden">
-      <div className="text-center mb-12 relative z-10">
-        <h2 className="text-3xl md:text-5xl font-semibold text-deep-mocha">
-          Explore Our <span className="text-soft-gold">Bags</span>
-        </h2>
-        <p className="text-cloud-grey mt-4 max-w-2xl mx-auto">
-          Click on any bag to see full details and purchase options.
-        </p>
-      </div>
+    <div className="w-full relative bg-warm-ivory py-16">
+      {/* Heading */}
+      <h2 className="text-3xl font-extrabold text-deep-mocha mb-8 text-center">
+        What Our Customers Say
+      </h2>
 
-      <div
-        className="overflow-hidden w-full relative max-w-7xl mx-auto z-10"
-        onMouseEnter={() => setStopScroll(true)}
-        onMouseLeave={() => setStopScroll(false)}
-      >
-        <div
-          className="marquee-inner flex w-fit"
-          style={{
-            animationPlayState: stopScroll ? "paused" : "running",
-            animationDuration: products.length * 2500 + "ms",
-          }}
+      {/* Wrapper to center scroll container */}
+      <div className="relative max-w-7xl mx-auto px-4">
+        {/* Arrows */}
+        <button
+          aria-label="Scroll Left"
+          onClick={() => scrollByAmount(-300)}
+          className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-black text-white rounded-full p-2 shadow-lg hover:bg-deep-mocha hover:text-warm-ivory transition-colors z-20"
         >
-          {[...products, ...products].map((product, index) => (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+
+        <button
+          aria-label="Scroll Right"
+          onClick={() => scrollByAmount(300)}
+          className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-black text-white rounded-full p-2 shadow-lg hover:bg-deep-mocha hover:text-warm-ivory transition-colors z-20"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+
+        {/* Scroll container */}
+        <div
+          ref={scrollContainerRef}
+          className="overflow-x-auto scrollbar-hide flex gap-6 cursor-grab py-4"
+          onMouseDown={onMouseDown}
+          onMouseUp={onMouseUp}
+          onMouseLeave={onMouseLeave}
+          onMouseMove={onMouseMove}
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+        >
+          {products.map((product) => (
             <div
-              key={index}
-              onClick={() => navigate(`/product/${product.id}`)}
-              className="w-64 mx-4 h-80 relative group rounded-2xl overflow-hidden hover:scale-105 transition-all duration-300 cursor-pointer"
+              key={product.id}
+              className="w-80 flex-shrink-0 cursor-pointer"
+              onClick={() => handleCardClick(product.id)}
             >
-              <img
-                src={product.image}
-                alt={product.name}
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-pure-black/20 flex flex-col justify-end p-4 opacity-0 group-hover:opacity-100 transition-all duration-300">
-                <p className="text-white font-semibold text-center mb-2">
-                  {product.name}
-                </p>
-                <p className="text-soft-gold font-medium text-center">
-                  ${product.price}
-                </p>
+              <div className="bg-warm-ivory rounded-lg border border-cloud-grey  duration-300 overflow-hidden">
+                <div className="p-6 flex flex-col items-center">
+                  <div
+                    className="w-full flex justify-center mb-4"
+                    style={{
+                      height: "180px",
+                      width: "180px",
+                      backgroundColor: "#fff",
+                    }}
+                  >
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+
+                  <div className="text-center w-full">
+                    {product.rating && (
+                      <div className="inline-flex items-center gap-1 mb-2 bg-soft-gold text-xs rounded px-2 py-1 font-bold text-pure-black">
+                        <svg
+                          className="w-4 h-4 fill-current"
+                          viewBox="0 0 20 20"
+                          aria-hidden="true"
+                        >
+                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.97a1 1 0 00.95.69h4.18c.969 0 1.371 1.24.588 1.81l-3.385 2.46a1 1 0 00-.364 1.118l1.286 3.97c.3.92-.755 1.688-1.538 1.118l-3.385-2.46a1 1 0 00-1.176 0l-3.385 2.46c-.783.57-1.838-.197-1.538-1.118l1.286-3.97a1 1 0 00-.364-1.118L2.045 9.397c-.783-.57-.38-1.81.588-1.81h4.18a1 1 0 00.95-.69l1.286-3.97z" />
+                        </svg>
+                        <span>
+                          {product.rating} ({product.reviewCount || 0})
+                        </span>
+                      </div>
+                    )}
+
+                    <h3 className="text-deep-mocha font-semibold text-base mb-2 line-clamp-2">
+                      {product.name}
+                    </h3>
+
+                    <div className="flex items-center justify-center gap-3 flex-wrap">
+                      <span className="text-soft-gold text-xl font-bold">
+                        Rs {product.price.toLocaleString()}
+                      </span>
+                      {product.originalPrice && (
+                        <span className="text-sm text-cloud-grey line-through">
+                          Rs {product.originalPrice.toLocaleString()}
+                        </span>
+                      )}
+                      {product.discountPercent && (
+                        <span className="text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full font-bold">
+                          {product.discountPercent}% OFF
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           ))}
         </div>
       </div>
 
-      <style>{`
-        .marquee-inner {
-          display: flex;
-          animation: marqueeScroll linear infinite;
-        }
-
-        @keyframes marqueeScroll {
-          0% {
-            transform: translateX(0%);
-          }
-          100% {
-            transform: translateX(-50%);
-          }
+      <style jsx>{`
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
         }
       `}</style>
-    </section>
+    </div>
   );
 };
 
