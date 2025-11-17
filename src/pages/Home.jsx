@@ -107,7 +107,7 @@ export default function Hero() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const sliderRef = useRef(null);
 
-  // Auto-slide every 3 seconds
+
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % images.length);
@@ -176,7 +176,7 @@ export default function Hero() {
 
       <Testimonials />
       <Products />
-      <LatestCreations />
+      {/* <LatestCreations /> */}
     </>
   );
 }

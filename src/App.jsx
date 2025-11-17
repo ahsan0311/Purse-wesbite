@@ -9,12 +9,14 @@ import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import ProductDetail from "./pages/ProductDetail";
 import { Toaster } from "react-hot-toast";
+import ScrollToTop from "./components/ScrollToTop";
 
 
 export default function App() {
   return (
     <>
      <Toaster position="top-right" reverseOrder={false} />
+     <ScrollToTop />
       <Navbar />
      
         <Routes>
